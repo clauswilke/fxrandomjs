@@ -60,3 +60,38 @@ test('Exponentially distributed random variates have correct mean', () => {
   expect(sum/n).toBeCloseTo(mean, 2)
 });
 
+test('Bernoulli trials work', () => {
+  let hash = 'ooKupY5D9xjBf6ubMseGxutz2rmN6vZXwAet8394AXstUJdsYF3'
+  let rnd = new FXRandom(hash, quiet = true)
+  let n = 100000
+
+  // default is 0.5
+  let count = 0
+  for (let i=0; i<n; i++) {
+    if (rnd.bernoulliTrial()) {
+      count += 1
+    }
+  }
+  expect(count/n).toBeCloseTo(0.5, 2)
+  
+  // try 0.2
+  count = 0
+  for (let i=0; i<n; i++) {
+    if (rnd.bernoulliTrial(0.2)) {
+      count += 1
+    }
+  }
+  expect(count/n).toBeCloseTo(0.2, 2)
+  
+  // try 0.95
+  count = 0
+  for (let i=0; i<n; i++) {
+    if (rnd.bernoulliTrial(0.95)) {
+      count += 1
+    }
+  }
+  expect(count/n).toBeCloseTo(0.95, 2)
+});
+
+
+

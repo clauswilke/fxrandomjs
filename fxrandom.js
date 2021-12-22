@@ -77,6 +77,14 @@ module.exports = class FXRandom {
   }
 
   /**
+   * Performs one Bernoulli trial and returns either `true` or `false`. 
+   * The argument `prob_true` sets the probability for the outcome `true`.
+   */ 
+  bernoulliTrial(prob_true = 0.5) {
+    return this.fxrand() < prob_true
+  }
+
+  /**
    * Generate a standard normal random number with zero mean and unit variance.
    */
   rStandardNorm () {
