@@ -17,7 +17,11 @@ module.exports = class FXRandom {
    * Re-initialize the random number generator with a new seed hash.
    */
   setSeed (fxhash = undefined, quiet = false) {
-    // code taken from fxhash snippet in default template, with minor edits
+    // The implementation for this function was taken from
+    // the fxhash snippet in the webpack boilerplate,
+    // with minor edits:
+    // https://github.com/fxhash/fxhash-webpack-boilerplate
+    // Code by ciphrd/fxhash, licensed under MIT
     let alphabet = "123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ"
 
     if (fxhash === undefined) {
@@ -134,7 +138,7 @@ module.exports = class FXRandom {
     return array[i]
   }
   
-    /**
+  /**
    * Return `n` randomly chosen elements from the given array,
    * with the condition that all chosen elements are unique (i.e.,
    * chosen without resampling). Elements are 
