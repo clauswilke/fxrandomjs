@@ -106,6 +106,13 @@ module.exports = class FXRandom {
   }
 
   /**
+   * Generate an exponentially distributed random number with given mean.
+   */
+  rExp (mean = 1) {
+    return -mean * Math.log(1 - this.fxrand())
+  }
+
+  /**
    * Return a randomly chosen value from the given array. All elements are 
    * chosen with equal probability.
    */
