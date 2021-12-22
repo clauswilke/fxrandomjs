@@ -1,0 +1,22 @@
+{
+  "name": "fxrandomjs",
+  "version": "0.0.1",
+  "description": "Deterministic pseudo-random-number generator",
+  "main": "fxrandom.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/clauswilke/fxrandomjs.git"
+  },
+  "author": "Claus O. Wilke",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/clauswilke/fxrandomjs/issues"
+  },
+  "homepage": "https://github.com/clauswilke/fxrandomjs#readme",
+  "devDependencies": {
+    "jest": "^27.4.5"
+  }
+}
