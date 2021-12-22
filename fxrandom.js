@@ -118,25 +118,40 @@ module.exports = class FXRandom {
    * chosen with probability in proportion to the given weights.
    */
   chooseOneWeighted (array, weights) {
+    return this.chooseManyWeighted (array, weights, 1)[0]
+  }
+
+  /**
+   * Returm `n` randomly chosen elements from the given array,
+   * with resampling. Elements are chosen with probability in
+   * proportion to the given weights.
+   */
+  chooseManyWeighted (array, weights, n) {
     // create cumulative normalized weights
-    let cumsum = new Array(weights.length)
+    let l = weights.length
+    let cumsum = new Array(l)
     let sum = 0
-    for (let i = 0; i<weights.length; i++) {
+    for (let i = 0; i<l; i++) {
       sum += weights[i]
       cumsum[i] = sum
     }
-    for (let i = 0; i<weights.length; i++) {
+    for (let i = 0; i<l; i++) {
       cumsum[i] /= sum
     }
     
-    // now choose random value according to probability distribution
-    let x = this.fxrand()
-    let i = 0
-    while (x > cumsum[i] && i < weights.length - 1) {
-      i++
+    // now choose random values according to probability distribution
+    let result = new Array(n)
+    for (let i = 0; i < n; i++) {
+      let x = this.fxrand()
+      let j = 0
+      while (x > cumsum[j] && j < l - 1) {
+        j += 1
+      }
+      result[i] = array[j]
     }
-    return array[i]
+    return result
   }
+
   
   /**
    * Return `n` randomly chosen elements from the given array,
