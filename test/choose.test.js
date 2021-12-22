@@ -1,5 +1,10 @@
 const FXRandom = require('../fxrandom.js');
 
+// helper function to find unqiue values
+function onlyUnique(value, index, self) {
+  return self.indexOf(value) === index;
+}
+
 test('Unweighted choice produces correct probabilities', () => {
   let hash = 'ooZ3Xz45G2WtXcPZVDLHwaLvypBAXaveeKtws2izTH5DjejCTmm'
   let rnd = new FXRandom(hash, quiet = true)
@@ -55,4 +60,38 @@ test('Weighted many choice equals repeated one choice', () => {
   }
   rnd.setSeed(hash, quiet = true)
   expect(result).toEqual(rnd.chooseManyWeighted(letters, weights, 10))
+});
+
+test('Unique choices are unique', () => {
+  let hash = 'ooHghkbjaoghfP5hJTMubuRFrNMcb3MnS6sdHX1xwh66oEzPq3H'
+  let rnd = new FXRandom(hash, quiet = true)
+  
+  let choice = rnd.chooseManyUnique(['a', 'b', 'c', 'd'], 3)
+  let choice_filtered = choice.filter(onlyUnique)
+  expect(choice).toEqual(choice_filtered)
+});
+
+test('Unique choices for n>l work', () => {
+  let hash = 'oot7Kt1REHduntveXxQDHqHDzeKoN4FUtWxyUZ9DTobWQz7Lnhe'
+  let rnd = new FXRandom(hash, quiet = true)
+  
+  let choice = rnd.chooseManyUnique(['a', 'b', 'c', 'd'], 6)
+  let remainder = choice.slice(4)
+  expect(remainder).toEqual([undefined, undefined])
+});
+
+test("Unique choices are uniformly distributed", () => {
+  let hash = 'oo8vvQvToMdwUzsvW6ywLtYZc52TKo3VCNmH8Zi9mNzDqCtXymV'
+  let rnd = new FXRandom(hash, quiet = true)
+  let result = [0, 0, 0, 0]
+  let n = 100000
+  for (let i = 0; i<n; i++) {
+    let choice = rnd.chooseManyUnique([0, 1, 2, 3], 3)
+    for (z of choice) {
+      result[z] += 1
+    }
+  }
+  for (let i = 0; i<4; i++) {
+    expect(result[i]/(3 * n)).toBeCloseTo(1/4, 2)
+  }
 });
