@@ -1,13 +1,14 @@
 /**
  * Random number generator class for use with fxhash.
  */
-module.exports = class FXRandom {
+class FXRandom {
   /**
    * Set up a new random number generator, either with defined hash or with
    * random hash.
    * @param {string} fxhash - The input hash. If not provided, a random
    * hash will be generated.
    * @param {boolean} quiet - Should hash be output to the console?
+   * @constructor
    */
   constructor (fxhash = undefined, quiet = false) {
     this.setSeed(fxhash, quiet)
@@ -15,6 +16,9 @@ module.exports = class FXRandom {
   
   /** 
    * Re-initialize the random number generator with a new seed hash.
+   * @param {string} fxhash - The input hash. If not provided, a random
+   * hash will be generated.
+   * @param {boolean} quiet - Should hash be output to the console?
    */
   setSeed (fxhash = undefined, quiet = false) {
     // The implementation for this function was taken from
@@ -62,15 +66,18 @@ module.exports = class FXRandom {
   }
   
   /**
-   * Generate a uniformly distributed random number between `min` (inclusive) 
-   * and `max` (exclusive).
+   * Generate a uniformly distributed random number.
+   * @param {number} min - The lower bound of the output interval (inclusive)
+   * @param {number} max - The upper bound of the output interval (exclusive)
    */
   rUnif (min = 0, max = 1) {
     return min + (max - min) * this.fxrand()
   }
 
   /**
-   * Generate a random integer between 0 (inclusive) and `n` (exclusive).
+   * Generate a random integer between 0 (inclusive) and the upper bound 
+   * (exclusive).
+   * @param {number} n - The upper bound of the integers chosen
    */
   rInt (n = 100) {
     return Math.floor(n * this.fxrand())
@@ -78,7 +85,7 @@ module.exports = class FXRandom {
 
   /**
    * Performs one Bernoulli trial and returns either `true` or `false`. 
-   * The argument `prob_true` sets the probability for the outcome `true`.
+   * @param {boolean} prob_true - The probability for the outcome `true`.
    */ 
   bernoulliTrial(prob_true = 0.5) {
     return this.fxrand() < prob_true
@@ -107,7 +114,10 @@ module.exports = class FXRandom {
   }
 
   /**
-   * Generate a standard normal random number with zero mean and unit variance.
+   * Generate a normal random number with given mean and standard deviation.
+   * @param {number} mean - The mean of the distribution
+   * @param {number} sd - The standard deviation of the distribution
+
    */
   rNorm (mean = 0, sd = 1) {
     return mean + sd * this.rStandardNorm()
@@ -115,6 +125,7 @@ module.exports = class FXRandom {
 
   /**
    * Generate an exponentially distributed random number with given mean.
+   * @param {number} mean - The mean of the distribution
    */
   rExp (mean = 1) {
     return -mean * Math.log(1 - this.fxrand())
@@ -123,6 +134,7 @@ module.exports = class FXRandom {
   /**
    * Return a randomly chosen value from the given array. All elements are 
    * chosen with equal probability.
+   * @param {Array} array - The array from which the element should be chosen
    */
   chooseOne (array) {
     return array[this.rInt(array.length)]
@@ -131,6 +143,8 @@ module.exports = class FXRandom {
   /**
    * Return a randomly chosen value from the given array. Elements are 
    * chosen with probability in proportion to the given weights.
+   * @param {Array} array - The array from which the element should be chosen
+   * @param {Array} weights - The numeric weights to use in the choice process
    */
   chooseOneWeighted (array, weights) {
     return this.chooseManyWeighted (array, weights, 1)[0]
@@ -140,6 +154,9 @@ module.exports = class FXRandom {
    * Returm `n` randomly chosen elements from the given array,
    * with resampling. Elements are chosen with probability in
    * proportion to the given weights.
+   * @param {Array} array - The array from which the element should be chosen
+   * @param {Array} weights - The numeric weights to use in the choice process
+   * @param {number} n - The number of elements to choose
    */
   chooseManyWeighted (array, weights, n) {
     // create cumulative normalized weights
@@ -169,10 +186,12 @@ module.exports = class FXRandom {
 
   
   /**
-   * Return `n` randomly chosen elements from the given array,
+   * Return several randomly chosen elements from the given array,
    * with the condition that all chosen elements are unique (i.e.,
    * chosen without resampling). Elements are 
    * chosen with uniform probability.
+   * @param {Array} array - The array from which the elements should be chosen
+   * @param {number} n - The number of elements to choose
    */
   chooseManyUnique (array, n) {
     // copy input array
@@ -199,3 +218,5 @@ module.exports = class FXRandom {
     return output
   }
 }
+
+module.exports = FXRandom
